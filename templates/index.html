@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title%} Home page {% endblock %} {%block
+content%}
+<div class="container  my-5">
+  <h1>All Blogs</h1>
+  {% for blog in all_blogs %}
+  <div class="card" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
+      <p class="card-text">
+        Some quick example text to build on the card title and make up the bulk
+        of the card’s content.
+      </p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
