@@ -64,6 +64,8 @@ def login():
             return redirect("/")
 
         return render_template("login.html")
+    
+    @app.route("/logout")
 
 
 if __name__ == "__main__":
