@@ -3,6 +3,7 @@ from flask import Flask, render_template, redirect, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import flash
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///blog.db"
@@ -59,13 +60,33 @@ def login():
         password = request.form.get("password")
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
-
             session["user"] = username
+            flash('Login Successful!', 'success')
             return redirect("/")
+        flash('Wrong Username Or Password', 'danger')
+    return render_template("login.html")
 
-        return render_template("login.html")
-    
-    @app.route("/logout")
+
+@app.route("/logout")
+def logout():
+    session.pop("user")
+    flash("logout successfully ", "info")
+    return redirect("/")
+
+
+@app.route("/create-blog", methods=["POST", "GET"])
+def create_blog():
+    if request.method == "POST":
+        title = request.form.get("title")
+        description = request.form.get("description")
+        new_blog = Blog(title=title, description=description, author=session["user"])
+        db.session.add(new_blog)
+        db.session.commit()
+        flash('Post created successfully!', 'success')
+        return redirect('/')
+    return render_template('create_blog.html')
+
+   
 
 
 if __name__ == "__main__":
